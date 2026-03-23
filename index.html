@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inferno - Alev Temalı Sosyal Medya</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a0000 0%, #330000 50%, #1a0000 100%);
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+        
+        header {
+            background: linear-gradient(to right, #ff4500, #ff6347);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .post-creator {
+            background: rgba(255, 69, 0, 0.1);
+            border: 2px solid #ff4500;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        
+        .post-creator textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #330000;
+            color: #fff;
+            border: 1px solid #ff4500;
+            border-radius: 5px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .post-creator input[type="file"] {
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .post {
+            background: rgba(255, 69, 0, 0.1);
+            border-left: 4px solid #ff4500;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.2);
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #ff4500, #ff6347);
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        
+        .post-image {
+            width: 100%;
+            max-height: 400px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #ff4500, #ff6347);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin: 5px;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+        }
+        
+        button:hover {
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.6);
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #330000;
+            color: #fff;
+            border: 1px solid #ff4500;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🔥 INFERNO 🔥</h1>
+        <p>Alev Temalı Sosyal Medya Platformu</p>
+    </header>
+    
+    <div class="container">
+        <div class="post">
+            <div class="post-header">
+                <div class="avatar"></div>
+                <div>
+                    <strong>Kullanıcı Adı</strong>
+                    <p style="font-size: 0.8em; color: #ff9999;">@inferno</p>
+                </div>
+            </div>
+            <p>Hoş geldiniz Inferno'ya! 🔥</p>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    let users = JSON.parse(localStorage.getItem('users')) || {};
+    let posts = JSON.parse(localStorage.getItem('posts')) || [];
+    let currentUser = localStorage.getItem('currentUser');
+
+    function showAuthModal() {
+        const modal = `
+            <div id="authModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000;">
+                <div style="background: #1a0000; padding: 30px; border-radius: 10px; border: 2px solid #ff4500; width: 300px;">
+                    <h2 style="color: #ff4500; margin-bottom: 20px;">Inferno'ya Giriş</h2>
+                    <input type="text" id="username" placeholder="Kullanıcı Adı" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ff4500; background: #330000; color: #fff; border-radius: 5px;">
+                    <input type="password" id="password" placeholder="Şifre" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ff4500; background: #330000; color: #fff; border-radius: 5px;">
+                    <button onclick="login()" style="width: 100%; margin-top: 10px;">Giriş Yap</button>
+                    <button onclick="register()" style="width: 100%; margin-top: 10px;">Kayıt Ol</button>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modal);
+    }
+
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        if (!username || !password) {
+            alert('Lütfen tüm alanları doldurun!');
+            return;
+        }
+        
+        if (users[username] && users[username] === password) {
+            currentUser = username;
+            localStorage.setItem('currentUser', currentUser);
+            document.getElementById('authModal').remove();
+            loadPosts();
+        } else {
+            alert('Kullanıcı adı veya şifre yanlış!');
+        }
+    }
+
+    function register() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        if (!username || !password) {
+            alert('Lütfen tüm alanları doldurun!');
+            return;
+        }
+        
+        if (users[username]) {
+            alert('Bu kullanıcı adı zaten kayıtlı!');
+            return;
+        }
+        
+        users[username] = password;
+        localStorage.setItem('users', JSON.stringify(users));
+        alert('Kayıt başarılı! Giriş yapın.');
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+    }
+
+    function logout() {
+        currentUser = null;
+        localStorage.setItem('currentUser', '');
+        location.reload();
+    }
+
+    function createPost() {
+        const content = document.getElementById('postContent').value;
+        const imageFile = document.getElementById('postImage').files[0];
+        
+        if (!content) {
+            alert('Lütfen bir gönderi yazın!');
+            return;
+        }
+        
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            const post = {
+                id: Date.now(),
+                author: currentUser,
+                content: content,
+                image: imageFile ? e.target.result : null,
+                likes: [],
+                comments: [],
+                timestamp: new Date().toLocaleString('tr-TR')
+            };
+            
+            posts.unshift(post);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            
+            document.getElementById('postContent').value = '';
+            document.getElementById('postImage').value = '';
+            loadPosts();
+        };
+        
+        if (imageFile) {
+            reader.readAsDataURL(imageFile);
+        } else {
+            const post = {
+                id: Date.now(),
+                author: currentUser,
+                content: content,
+                image: null,
+                likes: [],
+                comments: [],
+                timestamp: new Date().toLocaleString('tr-TR')
+            };
+            
+            posts.unshift(post);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            document.getElementById('postContent').value = '';
+            loadPosts();
+        }
+    }
+
+    function likePost(postId) {
+        const post = posts.find(p => p.id === postId);
+        const index = post.likes.indexOf(currentUser);
+        
+        if (index > -1) {
+            post.likes.splice(index, 1);
+        } else {
+            post.likes.push(currentUser);
+        }
+        
+        localStorage.setItem('posts', JSON.stringify(posts));
+        loadPosts();
+    }
+
+    function commentPost(postId) {
+        const text = document.getElementById('comment-input-' + postId).value;
+        if (!text) {
+            alert('Lütfen bir yorum yazın!');
+            return;
+        }
+        
+        const post = posts.find(p => p.id === postId);
+        post.comments.push({
+            id: Date.now(),
+            author: currentUser,
+            text: text,
+            replies: [],
+            timestamp: new Date().toLocaleString('tr-TR')
+        });
+        
+        localStorage.setItem('posts', JSON.stringify(posts));
+        loadPosts();
+    }
+
+    function loadPosts() {
+        const container = document.querySelector('.container');
+        container.innerHTML = '';
+        
+        if (!currentUser) {
+            showAuthModal();
+            return;
+        }
+        
+        container.insertAdjacentHTML('beforeend', `
+            <div style="text-align: center; margin-bottom: 20px;">
+                <p style="margin-bottom: 10px;">Hoş geldin, <strong>${currentUser}</strong>!</p>
+                <button onclick="logout()" style="background: #cc3300;">🚪 Çıkış Yap</button>
+            </div>
+            
+            <div class="post-creator">
+                <p style="margin-bottom: 10px;"><strong>Gönderi Yaz</strong></p>
+                <textarea id="postContent" placeholder="Ne düşünüyorsun?"></textarea>
+                <input type="file" id="postImage" accept="image/*" placeholder="Görsel Seç">
+                <button onclick="createPost()" style="width: 100%; background: #ff6347;">📤 Gönder</button>
+            </div>
+        `);
+        
+        posts.forEach(post => {
+            const liked = post.likes.includes(currentUser);
+            let commentsHtml = '';
+            
+            post.comments.forEach(comment => {
+                commentsHtml += `<div style="margin: 10px 0; padding: 10px; background: rgba(255,100,0,0.2); border-radius: 5px;">
+                    <strong>${comment.author}</strong> - ${comment.timestamp}<br>
+                    ${comment.text}
+                </div>`;
+            });
+            
+            const postHtml = `
+                <div class="post">
+                    <div class="post-header">
+                        <div class="avatar"></div>
+                        <div>
+                            <strong>${post.author}</strong>
+                            <p style="font-size: 0.8em; color: #ff9999;">${post.timestamp}</p>
+                        </div>
+                    </div>
+                    <p>${post.content}</p>
+                    ${post.image ? `<img src="${post.image}" class="post-image" alt="Gönderi Görseli">` : ''}
+                    <button onclick="likePost(${post.id})" style="background: ${liked ? '#ff6347' : '#ff4500'};">❤️ ${post.likes.length}</button>
+                    <button onclick="document.getElementById('comments-${post.id}').style.display='block'">💬 ${post.comments.length}</button>
+                    <div id="comments-${post.id}" style="display: none; margin-top: 10px;">
+                        ${commentsHtml}
+                        <textarea id="comment-input-${post.id}" class="comment-input" placeholder="Yorum yap..."></textarea>
+                        <button onclick="commentPost(${post.id})" style="width: 100%; margin-top: 5px;">Gönder</button>
+                    </div>
+                </div>
+            `;
+            
+            container.insertAdjacentHTML('beforeend', postHtml);
+        });
+    }
+
+    window.onload = function() {
+        if (currentUser) {
+            loadPosts();
+        } else {
+            showAuthModal();
+        }
+    };
+</script>
