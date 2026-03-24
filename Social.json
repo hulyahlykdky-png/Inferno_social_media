@@ -1,0 +1,20 @@
+{
+    "posts": [
+        {
+            "id": 1,
+            "userId": "user1",
+            "username": "Kullanıcı Adı",
+            "content": "Post içeriği",
+            "timestamp": "2024-01-15T10:30:00Z",
+            "likes": 0,
+            "comments": []
+        }
+    ],
+    "users": [
+        {
+            "id": "user1",
+            "username": "Kullanıcı Adı",
+            "email": "user@example.com"
+        }
+    ]
+}
