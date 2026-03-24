@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inferno - Alev Temalı Sosyal Medya</title>
+    <title>Inferno - Alev Teması Sosyal Medya</title>
     <style>
         * {
             margin: 0;
@@ -12,346 +12,411 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a0000 0%, #330000 50%, #1a0000 100%);
+            background: linear-gradient(135deg, #1a0000 0%, #330000 100%);
             color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             min-height: 100vh;
-        }
-        
-        header {
-            background: linear-gradient(to right, #ff4500, #ff6347);
             padding: 20px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
-        }
-        
-        header h1 {
-            font-size: 2.5em;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
         }
         
         .container {
             max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
+            margin: 0 auto;
         }
         
-        .post-creator {
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 32px;
+            color: #ff6b35;
+            text-shadow: 0 0 10px #ff4500;
+        }
+        
+        .login-form {
             background: rgba(255, 69, 0, 0.1);
             border: 2px solid #ff4500;
-            padding: 20px;
+            border-radius: 10px;
+            padding: 30px;
             margin-bottom: 20px;
-            border-radius: 8px;
         }
         
-        .post-creator textarea {
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #ff6b35;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="password"],
+        input[type="file"] {
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
-            background: #330000;
-            color: #fff;
-            border: 1px solid #ff4500;
+            border: 1px solid #ff6b35;
             border-radius: 5px;
-            font-family: inherit;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        
+        .post-form {
+            background: rgba(255, 69, 0, 0.1);
+            border: 2px solid #ff4500;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .posts {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ff6b35;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
             resize: vertical;
             min-height: 80px;
         }
         
-        .post-creator input[type="file"] {
-            margin-bottom: 10px;
-            color: #fff;
+        button {
+            background: linear-gradient(135deg, #ff4500 0%, #ff6b35 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        button:hover {
+            box-shadow: 0 0 15px #ff4500;
         }
         
         .post {
-            background: rgba(255, 69, 0, 0.1);
+            background: rgba(255, 69, 0, 0.15);
             border-left: 4px solid #ff4500;
             padding: 15px;
-            margin: 15px 0;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(255, 69, 0, 0.2);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.2);
         }
         
-        .post-header {
-            display: flex;
-            align-items: center;
+        .post-user {
+            font-weight: bold;
+            color: #ff6b35;
+            margin-bottom: 8px;
+        }
+        
+        .post-content {
+            color: #ddd;
+            line-height: 1.5;
             margin-bottom: 10px;
-        }
-        
-        .avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #ff4500, #ff6347);
-            border-radius: 50%;
-            margin-right: 10px;
         }
         
         .post-image {
             width: 100%;
-            max-height: 400px;
+            border-radius: 5px;
             margin: 10px 0;
-            border-radius: 5px;
+            max-height: 300px;
+            object-fit: cover;
         }
         
-        button {
-            background: linear-gradient(135deg, #ff4500, #ff6347);
-            color: white;
+        .post-time {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+        
+        .post-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .like-btn, .comment-btn {
+            background: none;
+            color: #ff6b35;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
             cursor: pointer;
-            margin: 5px;
-            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+            padding: 0;
+            font-weight: bold;
+            transition: 0.3s;
         }
         
-        button:hover {
-            box-shadow: 0 0 20px rgba(255, 69, 0, 0.6);
+        .like-btn:hover, .comment-btn:hover {
+            color: #ff4500;
         }
-
-        .comment-input {
-            width: 100%;
-            padding: 10px;
+        
+        .like-btn.liked {
+            color: #ff4500;
+        }
+        
+        .likes-count {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 8px;
+        }
+        
+        .comments {
             margin-top: 10px;
-            background: #330000;
-            color: #fff;
-            border: 1px solid #ff4500;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 107, 53, 0.3);
+        }
+        
+        .comment {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        
+        .comment-user {
+            color: #ff6b35;
+            font-weight: bold;
+        }
+        
+        .comment-input-group {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        
+        .comment-input-group input {
+            flex: 1;
+            padding: 5px;
+            margin: 0;
+        }
+        
+        .comment-input-group button {
+            padding: 5px 10px;
+            font-size: 12px;
+            margin: 0;
+        }
+        
+        .logout-btn {
+            float: right;
+            padding: 8px 15px;
+            font-size: 14px;
+            margin-top: 0;
+        }
+        
+        #imagePreview {
+            width: 100%;
+            max-height: 150px;
+            margin-top: 10px;
             border-radius: 5px;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>🔥 INFERNO 🔥</h1>
-        <p>Alev Temalı Sosyal Medya Platformu</p>
-    </header>
-    
     <div class="container">
-        <div class="post">
-            <div class="post-header">
-                <div class="avatar"></div>
-                <div>
-                    <strong>Kullanıcı Adı</strong>
-                    <p style="font-size: 0.8em; color: #ff9999;">@inferno</p>
-                </div>
+        <div class="header">🔥 INFERNO</div>
+        
+        <div class="login-form" id="loginForm">
+            <div class="form-group">
+                <label for="username">Kullanıcı Adı:</label>
+                <input type="text" id="username" placeholder="Kullanıcı adınızı girin...">
             </div>
-            <p>Hoş geldiniz Inferno'ya! 🔥</p>
+            <div class="form-group">
+                <label for="password">Şifre:</label>
+                <input type="password" id="password" placeholder="Şifrenizi girin...">
+            </div>
+            <button onclick="login()">Giriş Yap 🔥</button>
         </div>
+        
+        <div class="post-form" id="postForm">
+            <button class="logout-btn" onclick="logout()">Çıkış Yap</button>
+            <div style="clear: both;"></div>
+            <textarea id="postInput" placeholder="Düşüncelerini paylaş..."></textarea>
+            <input type="file" id="imageInput" accept="image/*">
+            <img id="imagePreview">
+            <button onclick="addPost()">Gönder 🔥</button>
+        </div>
+        
+        <div class="posts" id="posts"></div>
     </div>
-</body>
-</html>
-<script>
-    let users = JSON.parse(localStorage.getItem('users')) || {};
-    let posts = JSON.parse(localStorage.getItem('posts')) || [];
-    let currentUser = localStorage.getItem('currentUser');
-
-    function showAuthModal() {
-        const modal = `
-            <div id="authModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; z-index: 1000;">
-                <div style="background: #1a0000; padding: 30px; border-radius: 10px; border: 2px solid #ff4500; width: 300px;">
-                    <h2 style="color: #ff4500; margin-bottom: 20px;">Inferno'ya Giriş</h2>
-                    <input type="text" id="username" placeholder="Kullanıcı Adı" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ff4500; background: #330000; color: #fff; border-radius: 5px;">
-                    <input type="password" id="password" placeholder="Şifre" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ff4500; background: #330000; color: #fff; border-radius: 5px;">
-                    <button onclick="login()" style="width: 100%; margin-top: 10px;">Giriş Yap</button>
-                    <button onclick="register()" style="width: 100%; margin-top: 10px;">Kayıt Ol</button>
-                </div>
-            </div>
-        `;
-        document.body.insertAdjacentHTML('beforeend', modal);
-    }
-
-    function login() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+    
+    <script>
+        let currentUser = null;
+        let posts = [];
         
-        if (!username || !password) {
-            alert('Lütfen tüm alanları doldurun!');
-            return;
+        function loadPosts() {
+            const saved = localStorage.getItem('infernoPosts');
+            posts = saved ? JSON.parse(saved) : [];
+            renderPosts();
         }
         
-        if (users[username] && users[username] === password) {
+        function savePosts() {
+            localStorage.setItem('infernoPosts', JSON.stringify(posts));
+        }
+        
+        function login() {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (username === '' || password === '') {
+                alert('Lütfen kullanıcı adı ve şifre girin!');
+                return;
+            }
+            
             currentUser = username;
-            localStorage.setItem('currentUser', currentUser);
-            document.getElementById('authModal').remove();
-            loadPosts();
-        } else {
-            alert('Kullanıcı adı veya şifre yanlış!');
-        }
-    }
-
-    function register() {
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        
-        if (!username || !password) {
-            alert('Lütfen tüm alanları doldurun!');
-            return;
-        }
-        
-        if (users[username]) {
-            alert('Bu kullanıcı adı zaten kayıtlı!');
-            return;
-        }
-        
-        users[username] = password;
-        localStorage.setItem('users', JSON.stringify(users));
-        alert('Kayıt başarılı! Giriş yapın.');
-        document.getElementById('username').value = '';
-        document.getElementById('password').value = '';
-    }
-
-    function logout() {
-        currentUser = null;
-        localStorage.setItem('currentUser', '');
-        location.reload();
-    }
-
-    function createPost() {
-        const content = document.getElementById('postContent').value;
-        const imageFile = document.getElementById('postImage').files[0];
-        
-        if (!content) {
-            alert('Lütfen bir gönderi yazın!');
-            return;
-        }
-        
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            const post = {
-                id: Date.now(),
-                author: currentUser,
-                content: content,
-                image: imageFile ? e.target.result : null,
-                likes: [],
-                comments: [],
-                timestamp: new Date().toLocaleString('tr-TR')
-            };
-            
-            posts.unshift(post);
-            localStorage.setItem('posts', JSON.stringify(posts));
-            
-            document.getElementById('postContent').value = '';
-            document.getElementById('postImage').value = '';
-            loadPosts();
-        };
-        
-        if (imageFile) {
-            reader.readAsDataURL(imageFile);
-        } else {
-            const post = {
-                id: Date.now(),
-                author: currentUser,
-                content: content,
-                image: null,
-                likes: [],
-                comments: [],
-                timestamp: new Date().toLocaleString('tr-TR')
-            };
-            
-            posts.unshift(post);
-            localStorage.setItem('posts', JSON.stringify(posts));
-            document.getElementById('postContent').value = '';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('postForm').style.display = 'block';
+            document.getElementById('posts').style.display = 'flex';
+            document.getElementById('postInput').focus();
             loadPosts();
         }
-    }
-
-    function likePost(postId) {
-        const post = posts.find(p => p.id === postId);
-        const index = post.likes.indexOf(currentUser);
         
-        if (index > -1) {
-            post.likes.splice(index, 1);
-        } else {
-            post.likes.push(currentUser);
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('postForm').style.display = 'none';
+            document.getElementById('posts').style.display = 'none';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('postInput').value = '';
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
         }
         
-        localStorage.setItem('posts', JSON.stringify(posts));
-        loadPosts();
-    }
-
-    function commentPost(postId) {
-        const text = document.getElementById('comment-input-' + postId).value;
-        if (!text) {
-            alert('Lütfen bir yorum yazın!');
-            return;
-        }
-        
-        const post = posts.find(p => p.id === postId);
-        post.comments.push({
-            id: Date.now(),
-            author: currentUser,
-            text: text,
-            replies: [],
-            timestamp: new Date().toLocaleString('tr-TR')
+        document.getElementById('imageInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const preview = document.getElementById('imagePreview');
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
         });
         
-        localStorage.setItem('posts', JSON.stringify(posts));
-        loadPosts();
-    }
-
-    function loadPosts() {
-        const container = document.querySelector('.container');
-        container.innerHTML = '';
-        
-        if (!currentUser) {
-            showAuthModal();
-            return;
+        function addPost() {
+            const input = document.getElementById('postInput');
+            const text = input.value.trim();
+            const imagePreview = document.getElementById('imagePreview');
+            
+            if (text === '' && imagePreview.style.display === 'none') return;
+            
+            const post = {
+                id: Date.now(),
+                user: currentUser,
+                content: text,
+                image: imagePreview.src || null,
+                time: new Date().toLocaleTimeString('tr-TR'),
+                date: new Date().toLocaleDateString('tr-TR'),
+                likes: [],
+                comments: []
+            };
+            
+            posts.unshift(post);
+            savePosts();
+            input.value = '';
+            document.getElementById('imageInput').value = '';
+            imagePreview.style.display = 'none';
+            renderPosts();
         }
         
-        container.insertAdjacentHTML('beforeend', `
-            <div style="text-align: center; margin-bottom: 20px;">
-                <p style="margin-bottom: 10px;">Hoş geldin, <strong>${currentUser}</strong>!</p>
-                <button onclick="logout()" style="background: #cc3300;">🚪 Çıkış Yap</button>
-            </div>
+        function toggleLike(postId) {
+            const post = posts.find(p => p.id === postId);
+            const index = post.likes.indexOf(currentUser);
             
-            <div class="post-creator">
-                <p style="margin-bottom: 10px;"><strong>Gönderi Yaz</strong></p>
-                <textarea id="postContent" placeholder="Ne düşünüyorsun?"></textarea>
-                <input type="file" id="postImage" accept="image/*" placeholder="Görsel Seç">
-                <button onclick="createPost()" style="width: 100%; background: #ff6347;">📤 Gönder</button>
-            </div>
-        `);
+            if (index > -1) {
+                post.likes.splice(index, 1);
+            } else {
+                post.likes.push(currentUser);
+            }
+            
+            savePosts();
+            renderPosts();
+        }
         
-        posts.forEach(post => {
-            const liked = post.likes.includes(currentUser);
-            let commentsHtml = '';
+        function addComment(postId) {
+            const commentInput = document.querySelector(`#commentInput-${postId}`);
+            const text = commentInput.value.trim();
             
-            post.comments.forEach(comment => {
-                commentsHtml += `<div style="margin: 10px 0; padding: 10px; background: rgba(255,100,0,0.2); border-radius: 5px;">
-                    <strong>${comment.author}</strong> - ${comment.timestamp}<br>
-                    ${comment.text}
-                </div>`;
+            if (text === '') return;
+            
+            const post = posts.find(p => p.id === postId);
+            post.comments.push({
+                user: currentUser,
+                text: text,
+                time: new Date().toLocaleTimeString('tr-TR')
             });
             
-            const postHtml = `
-                <div class="post">
-                    <div class="post-header">
-                        <div class="avatar"></div>
-                        <div>
-                            <strong>${post.author}</strong>
-                            <p style="font-size: 0.8em; color: #ff9999;">${post.timestamp}</p>
+            savePosts();
+            commentInput.value = '';
+            renderPosts();
+        }
+        
+        function renderPosts() {
+            const postsDiv = document.getElementById('posts');
+            postsDiv.innerHTML = '';
+            
+            posts.forEach(post => {
+                const postEl = document.createElement('div');
+                postEl.className = 'post';
+                
+                const isLiked = post.likes.includes(currentUser);
+                
+                postEl.innerHTML = `
+                    <div class="post-user">${post.user}</div>
+                    <div class="post-content">${post.content}</div>
+                    ${post.image ? `<img src="${post.image}" class="post-image">` : ''}
+                    <div class="post-time">${post.date} ${post.time}</div>
+                    
+                    <div class="post-actions">
+                        <button class="like-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                            ❤️ Beğen (${post.likes.length})
+                        </button>
+                        <button class="comment-btn" onclick="document.getElementById('commentInput-${post.id}').focus()">
+                            💬 Yorum (${post.comments.length})
+                        </button>
+                    </div>
+                    
+                    ${post.likes.length > 0 ? `<div class="likes-count">❤️ ${post.likes.join(', ')}</div>` : ''}
+                    
+                    <div class="comments">
+                        ${post.comments.map(c => `
+                            <div class="comment">
+                                <span class="comment-user">${c.user}</span> ${c.text}
+                                <div style="font-size: 11px; color: #666; margin-top: 3px;">${c.time}</div>
+                            </div>
+                        `).join('')}
+                        <div class="comment-input-group">
+                            <input type="text" id="commentInput-${post.id}" placeholder="Yorum yap...">
+                            <button onclick="addComment(${post.id})">Gönder</button>
                         </div>
                     </div>
-                    <p>${post.content}</p>
-                    ${post.image ? `<img src="${post.image}" class="post-image" alt="Gönderi Görseli">` : ''}
-                    <button onclick="likePost(${post.id})" style="background: ${liked ? '#ff6347' : '#ff4500'};">❤️ ${post.likes.length}</button>
-                    <button onclick="document.getElementById('comments-${post.id}').style.display='block'">💬 ${post.comments.length}</button>
-                    <div id="comments-${post.id}" style="display: none; margin-top: 10px;">
-                        ${commentsHtml}
-                        <textarea id="comment-input-${post.id}" class="comment-input" placeholder="Yorum yap..."></textarea>
-                        <button onclick="commentPost(${post.id})" style="width: 100%; margin-top: 5px;">Gönder</button>
-                    </div>
-                </div>
-            `;
-            
-            container.insertAdjacentHTML('beforeend', postHtml);
-        });
-    }
-
-    window.onload = function() {
-        if (currentUser) {
-            loadPosts();
-        } else {
-            showAuthModal();
+                `;
+                
+                postsDiv.appendChild(postEl);
+            });
         }
-    };
-</script>
+        
+        document.getElementById('postInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) addPost();
+        });
+        
+        document.getElementById('password').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') login();
+        });
+    </script>
+</body>
+</html>
